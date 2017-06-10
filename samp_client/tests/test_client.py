@@ -3,7 +3,7 @@ from __future__ import unicode_literals, absolute_import
 from unittest import TestCase
 
 from samp_client.client import SampClient
-from samp_client.models import ServerInfo
+from samp_client.models import ServerInfo, Rule
 
 
 class ClientTestCase(TestCase):
@@ -36,3 +36,19 @@ class ClientTestCase(TestCase):
         self.assertTrue(info.hostname)
         self.assertTrue(info.gamemode)
         self.assertTrue(info.language)
+
+    def test_server_rules(self):
+        rules = list(self.client.get_server_rules())
+        self.assertEqual(6, len(rules))
+        self.assertIsNotNone(rules)
+        self.assertIsInstance(rules[0], Rule)
+
+
+    def test_server_rules_dict(self):
+        rules = self.client.get_server_rules_dict()
+        self.assertIsNotNone(rules)
+        self.assertIsInstance(rules, dict)
+        self.assertIn('worldtime', rules)
+        self.assertIn('mapname', rules)
+        self.assertIn('version', rules)
+        self.assertIn('weather', rules)
