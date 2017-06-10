@@ -3,7 +3,7 @@ from __future__ import unicode_literals, absolute_import
 from unittest import TestCase
 
 from samp_client.client import SampClient
-from samp_client.models import ServerInfo, Rule, Client
+from samp_client.models import ServerInfo, Rule, Client, ClientDetail
 
 
 class ClientTestCase(TestCase):
@@ -57,4 +57,13 @@ class ClientTestCase(TestCase):
             self.assertIsInstance(client, Client)
             self.assertIsInstance(client.name, str)
             self.assertIsInstance(client.score, int)
+            return # only need to test first yielded client
+
+    def test_server_clients_detailed(self):
+        for client in self.client.get_server_clients_detailed():
+            self.assertIsInstance(client, ClientDetail)
+            self.assertIsInstance(client.name, str)
+            self.assertIsInstance(client.score, int)
+            self.assertIsInstance(client.ping, int)
+            self.assertIsInstance(client.id, int)
             return # only need to test first yielded client

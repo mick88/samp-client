@@ -15,3 +15,8 @@ with SampClient(address='server.convoytrucking.net') as client:
     print 'Connected players:'
     for player in client.get_server_clients():
         print '{} ({})'.format(player.name, player.score)
+
+
+    print 'Connected players (detailed):'
+    for player in client.get_server_clients_detailed():
+        print repr(player)

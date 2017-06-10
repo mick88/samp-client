@@ -3,7 +3,7 @@ from __future__ import unicode_literals, absolute_import
 import socket
 
 from samp_client.constants import *
-from samp_client.models import ServerInfo, Rule, Client
+from samp_client.models import ServerInfo, Rule, Client, ClientDetail
 from samp_client.utils import encode_bytes, decode_int, decode_string
 
 
@@ -97,3 +97,24 @@ class SampClient(object):
                 name=name,
                 score=score,
             )
+
+    def get_server_clients_detailed(self):
+        response = self.send_request(OPCODE_CLIENTS_DETAILED)
+        num_clients = decode_int(response[:2])
+        offset = 2
+        for n in xrange(num_clients):
+            player_id = decode_int(response[offset])
+            offset += 1
+            name = decode_string(response, offset, len_bytes=1)
+            offset += 1 + len(name)
+            score = decode_int(response[offset:offset + 4])
+            offset += 4
+            ping = decode_int(response[offset:offset + 4])
+            offset += 4
+            yield ClientDetail(
+                id=player_id,
+                name=name,
+                score=score,
+                ping=ping,
+            )
+
