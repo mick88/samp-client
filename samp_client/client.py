@@ -36,11 +36,12 @@ class SampClient(object):
         if hasattr(self, 'socket'):
             self.disconnect()
 
-    def send_request(self, opcode):
-        body = b'SAMP{ip}{port}{opcode}'.format(
+    def send_request(self, opcode, extras=None):
+        body = b'SAMP{ip}{port}{opcode}{extras}'.format(
             ip=encode_bytes(*[(int(n)) for n in self.address.split('.')]),
             port=encode_bytes(self.port & 0xFF, self.port >> 8 & 0xFF),
             opcode=opcode,
+            extras=extras or '',
         )
         self.socket.sendto(body, (self.address, self.port))
 
@@ -118,3 +119,15 @@ class SampClient(object):
                 ping=ping,
             )
 
+    def probe_server(self, value='ping'):
+        assert len(value) == 4, 'Value must be exactly 4 characters'
+        response = self.send_request(OPCODE_PSEUDORANDOM, extras=value)
+        return response
+
+    def validate_server(self, value='ping'):
+        """
+        Sends a query to server and validates that response matches the requested value
+        """
+        response = self.probe_server(value)
+        if response != value:
+            raise ValueError('Server returned {} instead of {}'.format(response, value))
