@@ -5,8 +5,13 @@ with SampClient(address='server.convoytrucking.net') as client:
     server_info = client.get_server_info()
     print repr(server_info)
 
+    print 'Rules:'
     for rule in client.get_server_rules():
         print '{}={}'.format(
             rule.name,
             rule.value,
         )
+
+    print 'Connected players:'
+    for player in client.get_server_clients():
+        print '{} ({})'.format(player.name, player.score)

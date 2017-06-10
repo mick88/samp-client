@@ -3,7 +3,7 @@ from __future__ import unicode_literals, absolute_import
 from unittest import TestCase
 
 from samp_client.client import SampClient
-from samp_client.models import ServerInfo, Rule
+from samp_client.models import ServerInfo, Rule, Client
 
 
 class ClientTestCase(TestCase):
@@ -43,7 +43,6 @@ class ClientTestCase(TestCase):
         self.assertIsNotNone(rules)
         self.assertIsInstance(rules[0], Rule)
 
-
     def test_server_rules_dict(self):
         rules = self.client.get_server_rules_dict()
         self.assertIsNotNone(rules)
@@ -52,3 +51,10 @@ class ClientTestCase(TestCase):
         self.assertIn('mapname', rules)
         self.assertIn('version', rules)
         self.assertIn('weather', rules)
+
+    def test_server_clients(self):
+        for client in self.client.get_server_clients():
+            self.assertIsInstance(client, Client)
+            self.assertIsInstance(client.name, str)
+            self.assertIsInstance(client.score, int)
+            return # only need to test first yielded client
