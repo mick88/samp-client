@@ -1,8 +1,9 @@
 from __future__ import unicode_literals, absolute_import
+
 import socket
 
 from samp_client.constants import *
-from samp_client.tests.models import ServerInfo
+from samp_client.models import ServerInfo
 from samp_client.utils import encode_bytes, decode_int, decode_string
 
 
