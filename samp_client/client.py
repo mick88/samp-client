@@ -142,14 +142,20 @@ class SampClient(object):
         if response != value:
             raise ValueError('Server returned {} instead of {}'.format(response, value))
 
-    def send_rcon_command(self, command):
+    @property
+    def rcon_password_bytes(self):
+        """
+        password prefixed with its encoded length
+        """
         if not self.rcon_password:
             raise ValueError('Rcon password was not provided')
         pass_len = len(self.rcon_password)
+        return encode_bytes(pass_len & 0xFF, pass_len >> 8 & 0xFF) + self.rcon_password
+
+    def send_rcon_command(self, command):
         command_len = len(command)
-        rcon_payload = '{password_length}{password}{command_length}{command}'.format(
-            password_length=encode_bytes(pass_len & 0xFF, pass_len >> 8 & 0xFF),
-            password=self.rcon_password,
+        rcon_payload = '{password}{command_length}{command}'.format(
+            password=self.rcon_password_bytes,
             command_length=encode_bytes(command_len & 0xFF, command_len >> 8 & 0xFF),
             command=command,
         )
