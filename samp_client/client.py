@@ -12,6 +12,7 @@ class SampClient(object):
     Client class for communicating with SA-MP Query API
     http://wiki.sa-mp.com/wiki/Query_Mechanism
     """
+    timeout = 1.0
 
     def __init__(self, address='127.0.0.1', port=7777, rcon_password=None):
         super(SampClient, self).__init__()
@@ -24,7 +25,7 @@ class SampClient(object):
     def connect(self):
         self.address = socket.gethostbyname(self.address)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.settimeout(1.0)
+        self.socket.settimeout(self.timeout)
         return self
 
     def disconnect(self):
@@ -51,9 +52,12 @@ class SampClient(object):
             return self.receive()
 
     def receive(self, buffersize=4096, strip_header=True):
-        response = self.socket.recv(buffersize)
-        # Strip header from the response
-        return response[11:] if strip_header else response
+        try:
+            response = self.socket.recv(buffersize)
+            # Strip header from the response
+            return response[11:] if strip_header else response
+        except socket.timeout as e:
+            pass
 
     def get_server_info(self):
         response = self.send_request(OPCODE_INFO)
