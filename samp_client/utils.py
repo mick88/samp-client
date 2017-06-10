@@ -23,7 +23,7 @@ def decode_int(string):
     """
     result = 0
     for n, c in enumerate(string):
-        result |= ord(c) << n
+        result |= ord(c) << (8 * n)
     return result
 
 
