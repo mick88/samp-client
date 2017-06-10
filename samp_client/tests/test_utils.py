@@ -9,10 +9,14 @@ class UtilsTestCase(TestCase):
         expected = chr(127) + chr(0) + chr(0) + chr(1)
         self.assertEqual(expected, utils.encode_bytes(127, 0, 0, 1))
 
-    def test_decode(self):
+    def test_decode_int_1(self):
         self.assertEqual(0, utils.decode_int(chr(0)))
         self.assertEqual(16, utils.decode_int(chr(16)))
         self.assertEqual(200, utils.decode_int(chr(200)))
+
+
+    def test_decode_int_4(self):
+        self.assertEqual(7989, utils.decode_int('5\x1f\x00\x00'))
 
     def test_decode_string(self):
         input = '\x04Test+++'
