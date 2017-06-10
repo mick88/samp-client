@@ -13,16 +13,18 @@ class SampClient(object):
     http://wiki.sa-mp.com/wiki/Query_Mechanism
     """
 
-    def __init__(self, address='127.0.0.1', port=7777):
+    def __init__(self, address='127.0.0.1', port=7777, rcon_password=None):
         super(SampClient, self).__init__()
         assert isinstance(port, int)
         assert isinstance(address, basestring)
         self.address = address
         self.port = port
+        self.rcon_password = rcon_password
 
     def connect(self):
         self.address = socket.gethostbyname(self.address)
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.socket.settimeout(1.0)
         return self
 
     def disconnect(self):
@@ -36,7 +38,7 @@ class SampClient(object):
         if hasattr(self, 'socket'):
             self.disconnect()
 
-    def send_request(self, opcode, extras=None):
+    def send_request(self, opcode, extras=None, return_response=True):
         body = b'SAMP{ip}{port}{opcode}{extras}'.format(
             ip=encode_bytes(*[(int(n)) for n in self.address.split('.')]),
             port=encode_bytes(self.port & 0xFF, self.port >> 8 & 0xFF),
@@ -45,9 +47,13 @@ class SampClient(object):
         )
         self.socket.sendto(body, (self.address, self.port))
 
-        response = self.socket.recv(4096)
+        if return_response:
+            return self.receive()
+
+    def receive(self, buffersize=4096, strip_header=True):
+        response = self.socket.recv(buffersize)
         # Strip header from the response
-        return response[11:]
+        return response[11:] if strip_header else response
 
     def get_server_info(self):
         response = self.send_request(OPCODE_INFO)
@@ -131,3 +137,22 @@ class SampClient(object):
         response = self.probe_server(value)
         if response != value:
             raise ValueError('Server returned {} instead of {}'.format(response, value))
+
+    def send_rcon_command(self, command):
+        if not self.rcon_password:
+            raise ValueError('Rcon password was not provided')
+        pass_len = len(self.rcon_password)
+        command_len = len(command)
+        rcon_payload = '{password_length}{password}{command_length}{command}'.format(
+            password_length=encode_bytes(pass_len & 0xFF, pass_len >> 8 & 0xFF),
+            password=self.rcon_password,
+            command_length=encode_bytes(command_len & 0xFF, command_len >> 8 & 0xFF),
+            command=command,
+        )
+        self.send_request(OPCODE_RCON, extras=rcon_payload, return_response=False)
+        while True:
+            next_line = self.receive()
+            if next_line:
+                yield decode_string(next_line, 0, 2)
+            else:
+                break
