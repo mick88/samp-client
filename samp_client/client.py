@@ -61,7 +61,7 @@ class SampClient(object):
         return ServerInfo(
             password=bool(response[0]),
             players=decode_int(response[1:3]),
-            max_player=decode_int(response[3:5]),
+            max_players=decode_int(response[3:5]),
             hostname=hostname,
             gamemode=gamemode,
             language=language,

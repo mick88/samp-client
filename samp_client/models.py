@@ -1,3 +1,3 @@
 from collections import namedtuple
 
-ServerInfo = namedtuple('ServerInfo', ['password', 'players', 'max_player', 'hostname', 'gamemode', 'language'])
+ServerInfo = namedtuple('ServerInfo', ['password', 'players', 'max_players', 'hostname', 'gamemode', 'language'])
