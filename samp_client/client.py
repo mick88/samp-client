@@ -310,3 +310,33 @@ class SampClient(object):
 
     def rcon_set_password(self, password):
         return self.send_rcon_command(RCON_PASSWORD, args=(password,))[0]
+
+    def rcon_get_messageslimit(self):
+        return self.send_rcon_command(RCON_MESSAGESLIMIT)[0]
+
+    def rcon_set_messageslimit(self, limit):
+        return self.send_rcon_command(RCON_MESSAGESLIMIT, args=(limit,), fetch_response=False)
+
+    def rcon_get_ackslimit(self):
+        return self.send_rcon_command(RCON_ACKSLIMIT)[0]
+
+    def rcon_set_ackslimit(self, limit):
+        return self.send_rcon_command(RCON_ACKSLIMIT, args=(limit,), fetch_response=False)
+
+    def rcon_get_messageholelimit(self):
+        return self.send_rcon_command(RCON_MESSAGEHOLELIMIT)[0]
+
+    def rcon_set_messageholelimit(self, limit):
+        return self.send_rcon_command(RCON_MESSAGEHOLELIMIT, args=(limit,), fetch_response=False)
+
+    def rcon_get_playertimeout(self):
+        return self.send_rcon_command(RCON_PLAYERTIMEOUT)[0]
+
+    def rcon_set_playertimeout(self, limit):
+        return self.send_rcon_command(RCON_PLAYERTIMEOUT, args=(limit,), fetch_response=False)
+
+    def rcon_get_language(self):
+        return self.send_rcon_command(RCON_LANGUAGE)[0]
+
+    def rcon_set_language(self, limit):
+        return self.send_rcon_command(RCON_LANGUAGE, args=(limit,), fetch_response=False)
