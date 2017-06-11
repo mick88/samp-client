@@ -162,11 +162,8 @@ class SampClient(object):
         self.send_request(OPCODE_RCON, extras=rcon_payload, return_response=False)
         while True:
             response = self.receive()
-            if response:
-                line = decode_string(response, 0, 2)
-                if line:
-                    yield line
-                else:
-                    break
+            line = decode_string(response, 0, 2)
+            if line:
+                yield line
             else:
                 break
