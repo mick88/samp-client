@@ -3,7 +3,7 @@ from __future__ import unicode_literals, absolute_import
 import socket
 
 from samp_client.constants import *
-from samp_client.models import ServerInfo, Rule, Client, ClientDetail
+from samp_client.models import ServerInfo, Rule, Client, ClientDetail, RConPlayer
 from samp_client.utils import encode_bytes, decode_int, decode_string, build_rcon_command, parse_server_var
 
 
@@ -259,7 +259,17 @@ class SampClient(object):
         return self.send_rcon_command(RCON_SAY, args=(message,))
 
     def rcon_players(self):
-        return self.send_rcon_command(RCON_PLAYERS)
+        result = []
+        for line in self.send_rcon_command(RCON_PLAYERS)[1:]:
+            player_id, name, ping, ip = line.split('\t')
+            player = RConPlayer(
+                id=int(player_id),
+                name=str(name),
+                ping=int(ping),
+                ip=str(ip),
+            )
+            result.append(player)
+        return result
 
     def rcon_gravity(self, gravity=0.008):
         return self.send_rcon_command(RCON_GRAVITY, args=(gravity,))
