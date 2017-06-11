@@ -48,6 +48,8 @@ with SampClient(address='localhost', port=7777, rcon_password='password') as cli
     # 'Convoy Trucking 3.1.1'
     print client.rcon_get_hostname()
     # ServerVar(name='hostname', value='Convoy Trucking', read_only=False)
+    print client.rcon_players()[0].ping
+    # 26
 ```
 
 
