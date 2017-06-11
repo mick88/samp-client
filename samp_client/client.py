@@ -155,6 +155,7 @@ class SampClient(object):
     def send_rcon_command(self, command, args=tuple(), fetch_response=True):
         """
         Send any command to the server
+        leading whitespace is stripped from the response
         :param command: the comand to send
         :param args: tuple or list of arguments to be appended to the command. Can be also a string or an int if only one argument is expected.
         :param fetch_response: Whether to receive response from server. Set this to False if you're not expecting a response; WARNING: If there is a response and you don't fetch it, it may be output as a response of your next command.
@@ -176,7 +177,136 @@ class SampClient(object):
                     break
                 line = decode_string(response, 0, 2)
                 if line:
-                    result.append(line)
+                    result.append(line.lstrip())
                 else:
                     break
             return result
+
+    def rcon_cmdlist(self):
+        """ List of rcon commands """
+        return self.send_rcon_command(RCON_CMDLIST)[1:]
+
+    def rcon_varlist(self):
+        """ List of server variables """
+        # TODO return as var objects
+        return self.send_rcon_command(RCON_VARLIST)[1:]
+
+    def rcon_exit(self):
+        return self.send_rcon_command(RCON_EXIT, fetch_response=False)
+
+    def rcon_echo(self, text):
+        """ Print message to server console and send it back as a string"""
+        return self.send_rcon_command(RCON_ECHO, args=(text,))[0]
+
+    def rcon_set_hostname(self, name):
+        return self.send_rcon_command(RCON_HOSTNAME, args=(name,), fetch_response=False)
+
+    def rcon_get_hostname(self):
+        # TODO: parse var
+        return self.send_rcon_command(RCON_HOSTNAME)
+
+    def rcon_set_gamemodetext(self, name):
+        return self.send_rcon_command(RCON_GAMEMODETEXT, args=(name,), fetch_response=False)
+
+    def rcon_get_gamemodetext(self):
+        # TODO: parse var
+        return self.send_rcon_command(RCON_GAMEMODETEXT)
+
+    def rcon_set_mapname(self, name):
+        return self.send_rcon_command(RCON_MAPNAME, args=(name,), fetch_response=False)
+
+    def rcon_get_mapname(self):
+        # TODO: parse var
+        return self.send_rcon_command(RCON_MAPNAME)
+
+    def rcon_exec(self, filename):
+        response = self.send_rcon_command(RCON_EXEC, args=(filename,))
+        if len(response) == 1:
+            # Error response is returned as a single string
+            raise Exception(response[0])
+        else:
+            return response
+
+    def rcon_kick(self, player_id):
+        return self.send_rcon_command(RCON_KICK, args=(player_id,))
+
+    def rcon_ban(self, player_id):
+        return self.send_rcon_command(RCON_BAN, args=(player_id,))
+
+    def rcon_banip(self, ip_address):
+        return self.send_rcon_command(RCON_BANIP, args=(ip_address,))
+
+    def rcon_unbanip(self, ip_address):
+        return self.send_rcon_command(RCON_UNBANIP, args=(ip_address,))
+
+    def rcon_changemode(self, mode):
+        return self.send_rcon_command(RCON_CHANGEMODE, args=(mode,))
+
+    def rcon_gmx(self):
+        return self.send_rcon_command(RCON_GMX)
+
+    def rcon_reloadbans(self):
+        return self.send_rcon_command(RCON_RELOADBANS)
+
+    def rcon_reloadlog(self):
+        return self.send_rcon_command(RCON_RELOADBANS)
+
+    def rcon_say(self, message):
+        return self.send_rcon_command(RCON_SAY, args=(message,))
+
+    def rcon_players(self):
+        return self.send_rcon_command(RCON_PLAYERS)
+
+    def rcon_gravity(self, gravity=0.008):
+        return self.send_rcon_command(RCON_GRAVITY, args=(gravity,))
+
+    def rcon_weather(self, weather):
+        return self.send_rcon_command(RCON_WEATHER, args=(weather,))
+
+    def rcon_loadfs(self, name):
+        response = self.send_rcon_command(RCON_LOADFS, args=(name,))[0]
+        if 'load failed' in response:
+            raise Exception(response)
+        else:
+            return response
+
+    def rcon_unloadfs(self, name):
+        response = self.send_rcon_command(RCON_UNLOADFS, args=(name,))[0]
+        if 'unload failed' in response:
+            raise Exception(response)
+        else:
+            return response
+
+    def rcon_reloadfs(self, name):
+        response = self.send_rcon_command(RCON_RELOADFS, args=(name,))
+        if 'load failed' in response[-1]:
+            raise Exception(response[-1])
+        else:
+            return response
+
+    def rcon_get_weburl(self):
+        return self.send_rcon_command(RCON_WEBURL)[0]
+
+    def rcon_set_weburl(self, url):
+        return self.send_rcon_command(RCON_WEBURL, args=(url,))
+
+    def rcon_set_rcon_password(self, password):
+        """
+        Set server's rcon password
+        local password will be updated for future rcon commands
+        """
+        result = self.send_rcon_command(RCON_RCON_PASSWORD, args=(password,))
+        self.rcon_password = password
+
+    def rcon_get_rcon_password(self):
+        """
+        Set server's rcon password
+        local password will be updated for future rcon commands
+        """
+        return self.send_rcon_command(RCON_RCON_PASSWORD)[0]
+
+    def rcon_get_password(self):
+        return self.send_rcon_command(RCON_PASSWORD)[0]
+
+    def rcon_set_password(self, password):
+        return self.send_rcon_command(RCON_PASSWORD, args=(password,))[0]
