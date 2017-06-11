@@ -152,8 +152,6 @@ class SampClient(object):
         pass_len = len(self.rcon_password)
         return encode_bytes(pass_len & 0xFF, pass_len >> 8 & 0xFF) + self.rcon_password
 
-
-
     def send_rcon_command(self, command, args=tuple(), fetch_response=True):
         """
         Send any command to the server
