@@ -20,7 +20,7 @@ print client.get_server_info()
 client.disconnect()
 ```
 
-It is recommended to use use the class as a context manager to automatically connect and disconnect do reduce code and have lifecycle managed automatically:
+It is recommended to use use the class as a context manager to automatically connect and disconnect to reduce code and have lifecycle managed automatically:
 ```python
 from samp_client.client import SampClient
 
