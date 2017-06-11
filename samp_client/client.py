@@ -16,10 +16,9 @@ class SampClient(object):
 
     def __init__(self, address='127.0.0.1', port=7777, rcon_password=None):
         super(SampClient, self).__init__()
-        assert isinstance(port, int)
         assert isinstance(address, basestring)
         self.address = address
-        self.port = port
+        self.port = int(port)
         self.rcon_password = rcon_password
 
     def connect(self):

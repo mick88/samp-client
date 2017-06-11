@@ -46,6 +46,19 @@ def details(client):
         print("{client.id:3} | {client.name:26} | {client.score:5} | {client.ping:4}".format(client=client))
 
 
+def rcon(client):
+    if client.rcon_password is None:
+        print('RCON password was not provided. Please run this script with rcon password')
+        return
+    print('Enter rcon commands or leave blank to exit')
+    while True:
+        command = raw_input('RCON: ')
+        if not command:
+            return
+        for line in client.send_rcon_command(command):
+            print(line)
+
+
 def main(args):
     with SampClient(*args) as client:
         server_info = client.get_server_info()
@@ -58,6 +71,7 @@ i. Server Info
 r. Server Rules
 c. Connected clients
 d. Detailed clients
+x. RCON
 """.format(
             info=server_info,
         ))
@@ -71,6 +85,8 @@ d. Detailed clients
             clients(client)
         elif option == constants.OPCODE_CLIENTS_DETAILED:
             details(client)
+        elif option == constants.OPCODE_RCON:
+            rcon(client)
         else:
             print('Unknown option, bye!')
 
