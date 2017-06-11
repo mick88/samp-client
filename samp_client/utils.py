@@ -50,8 +50,9 @@ def build_rcon_command(command, args=None):
     if args is not None:
         # Bool check must come first because bool extends int
         if isinstance(args, bool):
-            args = str(int(args)),
+            args = int(args),
         elif isinstance(args, (basestring, int)):
-            args = str(args),
-        command += ' ' + ' '.join(args)
+            args = args,
+        if len(args):
+            command += ' ' + ' '.join(str(arg) for arg in args)
     return command
