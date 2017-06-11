@@ -4,7 +4,7 @@ import socket
 
 from samp_client.constants import *
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail
-from samp_client.utils import encode_bytes, decode_int, decode_string, build_rcon_command
+from samp_client.utils import encode_bytes, decode_int, decode_string, build_rcon_command, parse_server_var
 
 
 class SampClient(object):
@@ -188,8 +188,8 @@ class SampClient(object):
 
     def rcon_varlist(self):
         """ List of server variables """
-        # TODO return as var objects
-        return self.send_rcon_command(RCON_VARLIST)[1:]
+        vars = self.send_rcon_command(RCON_VARLIST)[1:]
+        return [parse_server_var(var) for var in vars]
 
     def rcon_exit(self):
         return self.send_rcon_command(RCON_EXIT, fetch_response=False)
@@ -202,22 +202,22 @@ class SampClient(object):
         return self.send_rcon_command(RCON_HOSTNAME, args=(name,), fetch_response=False)
 
     def rcon_get_hostname(self):
-        # TODO: parse var
-        return self.send_rcon_command(RCON_HOSTNAME)
+        response = self.send_rcon_command(RCON_HOSTNAME)[0]
+        return parse_server_var(response)
 
     def rcon_set_gamemodetext(self, name):
         return self.send_rcon_command(RCON_GAMEMODETEXT, args=(name,), fetch_response=False)
 
     def rcon_get_gamemodetext(self):
-        # TODO: parse var
-        return self.send_rcon_command(RCON_GAMEMODETEXT)
+        response = self.send_rcon_command(RCON_GAMEMODETEXT)[0]
+        return parse_server_var(response)
 
     def rcon_set_mapname(self, name):
         return self.send_rcon_command(RCON_MAPNAME, args=(name,), fetch_response=False)
 
     def rcon_get_mapname(self):
-        # TODO: parse var
-        return self.send_rcon_command(RCON_MAPNAME)
+        response = self.send_rcon_command(RCON_MAPNAME)[0]
+        return parse_server_var(response)
 
     def rcon_exec(self, filename):
         response = self.send_rcon_command(RCON_EXEC, args=(filename,))
@@ -285,7 +285,8 @@ class SampClient(object):
             return response
 
     def rcon_get_weburl(self):
-        return self.send_rcon_command(RCON_WEBURL)[0]
+        response = self.send_rcon_command(RCON_WEBURL)[0]
+        return parse_server_var(response)
 
     def rcon_set_weburl(self, url):
         return self.send_rcon_command(RCON_WEBURL, args=(url,))
@@ -299,44 +300,47 @@ class SampClient(object):
         self.rcon_password = password
 
     def rcon_get_rcon_password(self):
-        """
-        Set server's rcon password
-        local password will be updated for future rcon commands
-        """
-        return self.send_rcon_command(RCON_RCON_PASSWORD)[0]
+        response = self.send_rcon_command(RCON_RCON_PASSWORD)[0]
+        return parse_server_var(response)
 
     def rcon_get_password(self):
-        return self.send_rcon_command(RCON_PASSWORD)[0]
+        response = self.send_rcon_command(RCON_PASSWORD)[0]
+        return parse_server_var(response)
 
     def rcon_set_password(self, password):
         return self.send_rcon_command(RCON_PASSWORD, args=(password,))[0]
 
     def rcon_get_messageslimit(self):
-        return self.send_rcon_command(RCON_MESSAGESLIMIT)[0]
+        response = self.send_rcon_command(RCON_MESSAGESLIMIT)[0]
+        return parse_server_var(response)
 
     def rcon_set_messageslimit(self, limit):
         return self.send_rcon_command(RCON_MESSAGESLIMIT, args=(limit,), fetch_response=False)
 
     def rcon_get_ackslimit(self):
-        return self.send_rcon_command(RCON_ACKSLIMIT)[0]
+        response = self.send_rcon_command(RCON_ACKSLIMIT)[0]
+        return parse_server_var(response)
 
     def rcon_set_ackslimit(self, limit):
         return self.send_rcon_command(RCON_ACKSLIMIT, args=(limit,), fetch_response=False)
 
     def rcon_get_messageholelimit(self):
-        return self.send_rcon_command(RCON_MESSAGEHOLELIMIT)[0]
+        response = self.send_rcon_command(RCON_MESSAGEHOLELIMIT)[0]
+        return parse_server_var(response)
 
     def rcon_set_messageholelimit(self, limit):
         return self.send_rcon_command(RCON_MESSAGEHOLELIMIT, args=(limit,), fetch_response=False)
 
     def rcon_get_playertimeout(self):
-        return self.send_rcon_command(RCON_PLAYERTIMEOUT)[0]
+        response = self.send_rcon_command(RCON_PLAYERTIMEOUT)[0]
+        return parse_server_var(response)
 
     def rcon_set_playertimeout(self, limit):
         return self.send_rcon_command(RCON_PLAYERTIMEOUT, args=(limit,), fetch_response=False)
 
     def rcon_get_language(self):
-        return self.send_rcon_command(RCON_LANGUAGE)[0]
+        response = self.send_rcon_command(RCON_LANGUAGE)[0]
+        return parse_server_var(response)
 
     def rcon_set_language(self, limit):
         return self.send_rcon_command(RCON_LANGUAGE, args=(limit,), fetch_response=False)
