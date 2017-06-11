@@ -48,9 +48,8 @@ def details(client):
 
 def rcon(client):
     if client.rcon_password is None:
-        print('RCON password was not provided. Please run this script with rcon password')
-        return
-    print('Enter rcon commands or leave blank to exit')
+        client.rcon_password = raw_input('RCON password:')
+    print('Enter rcon commands or leave blank to exit. Example: cmdlist')
     while True:
         command = raw_input('RCON: ')
         if not command:
