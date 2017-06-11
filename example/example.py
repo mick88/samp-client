@@ -21,5 +21,4 @@ with SampClient(address='localhost', rcon_password='123') as client:
     for player in client.get_server_clients_detailed():
         print repr(player)
 
-    for line in client.send_rcon_command('varlist'):
-        print line
+    print client.send_rcon_command('varlist')

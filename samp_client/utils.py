@@ -39,3 +39,18 @@ def decode_string(string, len_pos, len_bytes=4):
     len_end = len_pos + len_bytes
     length = decode_int(string[len_pos:len_end])
     return string[len_end:len_end + length]
+
+def build_rcon_command(command, args=None):
+    """
+    Appends args to the command
+    :param command: the command string
+    :param args: list of arguments or a single argument (bool, string or int)
+    """
+    if args is not None:
+        # Bool check must come first because bool extends int
+        if isinstance(args, bool):
+            args = str(int(args)),
+        elif isinstance(args, (basestring, int)):
+            args = str(args),
+        command += ' ' + ' '.join(args)
+    return command

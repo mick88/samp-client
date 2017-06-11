@@ -4,7 +4,7 @@ import socket
 
 from samp_client.constants import *
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail
-from samp_client.utils import encode_bytes, decode_int, decode_string
+from samp_client.utils import encode_bytes, decode_int, decode_string, build_rcon_command
 
 
 class SampClient(object):
@@ -152,7 +152,17 @@ class SampClient(object):
         pass_len = len(self.rcon_password)
         return encode_bytes(pass_len & 0xFF, pass_len >> 8 & 0xFF) + self.rcon_password
 
-    def send_rcon_command(self, command):
+
+
+    def send_rcon_command(self, command, args=tuple(), fetch_response=True):
+        """
+        Send any command to the server
+        :param command: the comand to send
+        :param args: tuple or list of arguments to be appended to the command. Can be also a string or an int if only one argument is expected.
+        :param fetch_response: Whether to receive response from server. Set this to False if you're not expecting a response; WARNING: If there is a response and you don't fetch it, it may be output as a response of your next command.
+        :return list of lines responded from the server or None if fetch_response == False
+        """
+        command = build_rcon_command(command, args)
         command_len = len(command)
         rcon_payload = '{password}{command_length}{command}'.format(
             password=self.rcon_password_bytes,
@@ -160,10 +170,15 @@ class SampClient(object):
             command=command,
         )
         self.send_request(OPCODE_RCON, extras=rcon_payload, return_response=False)
-        while True:
-            response = self.receive()
-            line = decode_string(response, 0, 2)
-            if line:
-                yield line
-            else:
-                break
+        if fetch_response:
+            result = []
+            while True:
+                response = self.receive()
+                if response is None:
+                    break
+                line = decode_string(response, 0, 2)
+                if line:
+                    result.append(line)
+                else:
+                    break
+            return result
