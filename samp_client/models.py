@@ -5,3 +5,4 @@ ServerInfo = namedtuple('ServerInfo', ['password', 'players', 'max_players', 'ho
 Rule = namedtuple('Rule', ['name', 'value'])
 Client = namedtuple('Client', ['name', 'score'])
 ClientDetail = namedtuple('ClientDetail', ['id', 'name', 'score', 'ping'])
+ServerVar = namedtuple('ServerVar', ['name', 'value', 'read_only'])
