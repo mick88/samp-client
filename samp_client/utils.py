@@ -51,7 +51,7 @@ def build_rcon_command(command, args=None):
         # Bool check must come first because bool extends int
         if isinstance(args, bool):
             args = int(args),
-        elif isinstance(args, (basestring, int)):
+        elif isinstance(args, (basestring, int, float)):
             args = args,
         if len(args):
             command += ' ' + ' '.join(str(arg) for arg in args)

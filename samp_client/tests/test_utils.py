@@ -59,3 +59,7 @@ class UtilsTestCase(TestCase):
     def test_build_rcon_command_bool(self):
         self.assertEqual('test 1', utils.build_rcon_command('test', args=True))
         self.assertEqual('test 0', utils.build_rcon_command('test', args=False))
+
+    def test_build_rcon_command_float(self):
+        self.assertEqual('gravity 0.008', utils.build_rcon_command('gravity', args=0.008))
+        self.assertEqual('test 0.008', utils.build_rcon_command('test', args=0.008))
