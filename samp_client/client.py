@@ -191,6 +191,10 @@ class SampClient(object):
         vars = self.send_rcon_command(RCON_VARLIST)[1:]
         return [parse_server_var(var) for var in vars]
 
+    def rcon_varlist_dict(self):
+        """ Server vars as a dictionary mapping variable name to its value """
+        return {var.name: var.value for var in self.rcon_varlist()}
+
     def rcon_exit(self):
         return self.send_rcon_command(RCON_EXIT, fetch_response=False)
 
