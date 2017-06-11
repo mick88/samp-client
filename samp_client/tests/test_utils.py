@@ -41,3 +41,21 @@ class UtilsTestCase(TestCase):
         expected = 'Convoy Trucking'
         result = utils.decode_string(input, 4, 4)
         self.assertEqual(expected, result)
+
+    def test_build_rcon_command(self):
+        self.assertEqual('cmdlist', utils.build_rcon_command('cmdlist'))
+        self.assertEqual('cmdlist', utils.build_rcon_command('cmdlist', args=[]))
+
+    def test_build_rcon_command_string(self):
+        self.assertEqual('language Polish', utils.build_rcon_command('language', args='Polish'))
+        self.assertEqual('language Polish', utils.build_rcon_command('language', args=['Polish']))
+
+    def test_build_rcon_command_int(self):
+        self.assertEqual('kick 5', utils.build_rcon_command('kick', args=5))
+        self.assertEqual('kick 5', utils.build_rcon_command('kick', args=[5]))
+        self.assertEqual('kick 0', utils.build_rcon_command('kick', args=0))
+        self.assertEqual('kick 0', utils.build_rcon_command('kick', args=[0]))
+
+    def test_build_rcon_command_bool(self):
+        self.assertEqual('test 1', utils.build_rcon_command('test', args=True))
+        self.assertEqual('test 0', utils.build_rcon_command('test', args=False))

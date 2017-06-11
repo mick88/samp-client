@@ -40,6 +40,7 @@ def decode_string(string, len_pos, len_bytes=4):
     length = decode_int(string[len_pos:len_end])
     return string[len_end:len_end + length]
 
+
 def build_rcon_command(command, args=None):
     """
     Appends args to the command
