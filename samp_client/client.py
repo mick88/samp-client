@@ -81,15 +81,18 @@ class SampClient(object):
         response = self.send_request(OPCODE_RULES)
         num_rules = decode_int(response[:2])
         offset = 2
+        result = []
         for n in xrange(num_rules):
             name = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(name)
             value = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(value)
-            yield Rule(
+            rule = Rule(
                 name=name,
                 value=value,
             )
+            result.append(rule)
+        return result
 
     def get_server_rules_dict(self):
         return {rule.name: rule.value for rule in self.get_server_rules()}
@@ -98,20 +101,24 @@ class SampClient(object):
         response = self.send_request(OPCODE_CLIENTS)
         num_clients = decode_int(response[:2])
         offset = 2
+        result = []
         for n in xrange(num_clients):
             name = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(name)
             score = decode_int(response[offset:offset + 4])
             offset += 4
-            yield Client(
+            client = Client(
                 name=name,
                 score=score,
             )
+            result.append(client)
+        return result
 
     def get_server_clients_detailed(self):
         response = self.send_request(OPCODE_CLIENTS_DETAILED)
         num_clients = decode_int(response[:2])
         offset = 2
+        result = []
         for n in xrange(num_clients):
             player_id = decode_int(response[offset])
             offset += 1
@@ -121,12 +128,14 @@ class SampClient(object):
             offset += 4
             ping = decode_int(response[offset:offset + 4])
             offset += 4
-            yield ClientDetail(
+            detail = ClientDetail(
                 id=player_id,
                 name=name,
                 score=score,
                 ping=ping,
             )
+            result.append(detail)
+        return result
 
     def probe_server(self, value='ping'):
         assert len(value) == 4, 'Value must be exactly 4 characters'
