@@ -88,7 +88,7 @@ class SampClient(object):
             value = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(value)
             rule = Rule(
-                name=name,
+                name=str(name),
                 value=value,
             )
             result.append(rule)
