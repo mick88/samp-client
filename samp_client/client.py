@@ -82,7 +82,7 @@ class SampClient(object):
         num_rules = decode_int(response[:2])
         offset = 2
         result = []
-        for n in xrange(num_rules):
+        for n in range(num_rules):
             name = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(name)
             value = decode_string(response, offset, len_bytes=1)
@@ -102,7 +102,7 @@ class SampClient(object):
         num_clients = decode_int(response[:2])
         offset = 2
         result = []
-        for n in xrange(num_clients):
+        for n in range(num_clients):
             name = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(name)
             score = decode_int(response[offset:offset + 4])
@@ -119,7 +119,7 @@ class SampClient(object):
         num_clients = decode_int(response[:2])
         offset = 2
         result = []
-        for n in xrange(num_clients):
+        for n in range(num_clients):
             player_id = decode_int(response[offset])
             offset += 1
             name = decode_string(response, offset, len_bytes=1)
