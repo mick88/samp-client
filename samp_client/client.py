@@ -45,7 +45,7 @@ class SampClient(object):
             opcode=opcode,
             extras=extras or '',
         )
-        self.socket.sendto(bytes(body, encoding='UTF-8'), (self.address, self.port))
+        self.socket.sendto(bytes(body, encoding='latin-1'), (self.address, self.port))
 
         if return_response:
             return self.receive()
