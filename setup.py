@@ -21,5 +21,6 @@ setup(
     license='MIT',
     author='Michal Dabski',
     author_email='contact@michaldabski.com',
-    description='SA-MP API client for python supporting both query and RCON APIs'
+    description='SA-MP API client for python supporting both query and RCON APIs',
+    long_description=open('README.md', 'r').read(),
 )
