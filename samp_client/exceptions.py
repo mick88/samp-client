@@ -7,3 +7,7 @@ class SampError(Exception):
 
 class RconError(SampError):
     pass
+
+
+class InvalidRconPassword(RconError):
+    pass
