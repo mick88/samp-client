@@ -1,7 +1,7 @@
 from __future__ import unicode_literals, absolute_import
 
 import socket
-
+from past.builtins import basestring
 from samp_client.constants import *
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail, RConPlayer
 from samp_client.utils import encode_bytes, decode_int, decode_string, build_rcon_command, parse_server_var
@@ -39,13 +39,13 @@ class SampClient(object):
             self.disconnect()
 
     def send_request(self, opcode, extras=None, return_response=True):
-        body = b'SAMP{ip}{port}{opcode}{extras}'.format(
+        body = 'SAMP{ip}{port}{opcode}{extras}'.format(
             ip=encode_bytes(*[(int(n)) for n in self.address.split('.')]),
             port=encode_bytes(self.port & 0xFF, self.port >> 8 & 0xFF),
             opcode=opcode,
             extras=extras or '',
         )
-        self.socket.sendto(body, (self.address, self.port))
+        self.socket.sendto(bytes(body, encoding='UTF-8'), (self.address, self.port))
 
         if return_response:
             return self.receive()

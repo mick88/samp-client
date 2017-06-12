@@ -9,5 +9,6 @@ setup(
     license='MIT',
     author='Michal Dabski',
     author_email='contact@michaldabski.com',
+    requires=['future'],
     description='SA-MP API client for python supporting both query and RCON APIs'
 )

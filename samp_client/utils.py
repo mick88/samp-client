@@ -1,6 +1,7 @@
 from __future__ import unicode_literals, absolute_import
 
 import re
+from past.builtins import basestring
 from samp_client.models import ServerVar
 
 VAR_PATTERN = re.compile(r'\s*'.join((
@@ -26,7 +27,7 @@ def encode_bytes(*args):
     integer values are encoded into their char values
     :return: bytestring representing all arguments joined together
     """
-    result = b''
+    result = ''
     for arg in args:
         if isinstance(arg, basestring):
             result += str(arg)
@@ -41,7 +42,7 @@ def decode_int(string):
     """
     result = 0
     for n, c in enumerate(string):
-        result |= ord(c) << (8 * n)
+        result |= c << (8 * n)
     return result
 
 
