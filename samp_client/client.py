@@ -191,7 +191,7 @@ class SampClient(object):
                     break
         if len(result) == 1 and result[0] == 'Invalid RCON password.':
             raise InvalidRconPassword
-            return result
+        return result
 
     def rcon_cmdlist(self):
         """ List of rcon commands """
