@@ -3,6 +3,7 @@ from __future__ import unicode_literals, absolute_import
 import socket
 
 from samp_client.constants import *
+from samp_client.exceptions import SampError, RconError, InvalidRconPassword
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail, RConPlayer
 from samp_client.utils import encode_bytes, decode_int, decode_string, build_rcon_command, parse_server_var
 
@@ -148,7 +149,7 @@ class SampClient(object):
         """
         response = self.probe_server(value)
         if response != value:
-            raise ValueError('Server returned {} instead of {}'.format(response, value))
+            raise SampError('Server returned {} instead of {}'.format(response, value))
 
     @property
     def rcon_password_bytes(self):
@@ -156,7 +157,7 @@ class SampClient(object):
         password prefixed with its encoded length
         """
         if not self.rcon_password:
-            raise ValueError('Rcon password was not provided')
+            raise RconError('Rcon password was not provided')
         pass_len = len(self.rcon_password)
         return encode_bytes(pass_len & 0xFF, pass_len >> 8 & 0xFF) + self.rcon_password
 
@@ -188,7 +189,9 @@ class SampClient(object):
                     result.append(line.lstrip())
                 else:
                     break
-            return result
+        if len(result) == 1 and result[0] == 'Invalid RCON password.':
+            raise InvalidRconPassword
+        return result
 
     def rcon_cmdlist(self):
         """ List of rcon commands """
@@ -235,7 +238,7 @@ class SampClient(object):
         response = self.send_rcon_command(RCON_EXEC, args=(filename,))
         if len(response) == 1:
             # Error response is returned as a single string
-            raise Exception(response[0])
+            raise SampError(response[0])
         else:
             return response
 
@@ -288,21 +291,21 @@ class SampClient(object):
     def rcon_loadfs(self, name):
         response = self.send_rcon_command(RCON_LOADFS, args=(name,))[0]
         if 'load failed' in response:
-            raise Exception(response)
+            raise SampError(response)
         else:
             return response
 
     def rcon_unloadfs(self, name):
         response = self.send_rcon_command(RCON_UNLOADFS, args=(name,))[0]
         if 'unload failed' in response:
-            raise Exception(response)
+            raise SampError(response)
         else:
             return response
 
     def rcon_reloadfs(self, name):
         response = self.send_rcon_command(RCON_RELOADFS, args=(name,))
         if 'load failed' in response[-1]:
-            raise Exception(response[-1])
+            raise SampError(response[-1])
         else:
             return response
 
