@@ -44,6 +44,7 @@ class UtilsTestCase(TestCase):
     def test_build_rcon_command(self):
         self.assertEqual('cmdlist', utils.build_rcon_command('cmdlist'))
         self.assertEqual('cmdlist', utils.build_rcon_command('cmdlist', args=[]))
+        self.assertEqual('cmdlist', utils.build_rcon_command('cmdlist', args=tuple()))
 
     def test_build_rcon_command_string(self):
         self.assertEqual('language Polish', utils.build_rcon_command('language', args='Polish'))
