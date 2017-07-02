@@ -2,6 +2,7 @@ from __future__ import unicode_literals, absolute_import
 
 import socket
 from past.builtins import basestring
+from future.builtins import bytes
 from samp_client.constants import *
 from samp_client.exceptions import SampError, RconError, InvalidRconPassword
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail, RConPlayer
