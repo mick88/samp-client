@@ -1,9 +1,9 @@
 from __future__ import unicode_literals, absolute_import
 
 from unittest import TestCase
+from future.builtins import str
 
 from samp_client.client import SampClient
-from samp_client.exceptions import SampError
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail
 
 

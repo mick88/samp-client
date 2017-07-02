@@ -1,7 +1,8 @@
 from __future__ import unicode_literals, absolute_import
 
 import socket
-
+from past.builtins import basestring
+from future.builtins import bytes
 from samp_client.constants import *
 from samp_client.exceptions import SampError, RconError, InvalidRconPassword
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail, RConPlayer
@@ -39,13 +40,14 @@ class SampClient(object):
         if hasattr(self, 'socket'):
             self.disconnect()
 
-    def send_request(self, opcode, extras=None, return_response=True):
-        body = b'SAMP{ip}{port}{opcode}{extras}'.format(
-            ip=encode_bytes(*[(int(n)) for n in self.address.split('.')]),
-            port=encode_bytes(self.port & 0xFF, self.port >> 8 & 0xFF),
-            opcode=opcode,
-            extras=extras or '',
-        )
+    def send_request(self, opcode, extras=b'', return_response=True):
+        ip_address = encode_bytes(*[(int(n)) for n in self.address.split('.')])
+        port_number = encode_bytes(self.port & 0xFF, self.port >> 8 & 0xFF)
+        body = MSG_PREFIX \
+               + ip_address \
+               + port_number \
+               + opcode \
+               + extras
         self.socket.sendto(body, (self.address, self.port))
 
         if return_response:
@@ -83,13 +85,13 @@ class SampClient(object):
         num_rules = decode_int(response[:2])
         offset = 2
         result = []
-        for n in xrange(num_rules):
+        for n in range(num_rules):
             name = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(name)
             value = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(value)
             rule = Rule(
-                name=name,
+                name=str(name),
                 value=value,
             )
             result.append(rule)
@@ -103,7 +105,7 @@ class SampClient(object):
         num_clients = decode_int(response[:2])
         offset = 2
         result = []
-        for n in xrange(num_clients):
+        for n in range(num_clients):
             name = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(name)
             score = decode_int(response[offset:offset + 4])
@@ -120,8 +122,8 @@ class SampClient(object):
         num_clients = decode_int(response[:2])
         offset = 2
         result = []
-        for n in xrange(num_clients):
-            player_id = decode_int(response[offset])
+        for n in range(num_clients):
+            player_id = decode_int(response[offset:offset])
             offset += 1
             name = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(name)
@@ -159,7 +161,7 @@ class SampClient(object):
         if not self.rcon_password:
             raise RconError('Rcon password was not provided')
         pass_len = len(self.rcon_password)
-        return encode_bytes(pass_len & 0xFF, pass_len >> 8 & 0xFF) + self.rcon_password
+        return encode_bytes(pass_len & 0xFF, pass_len >> 8 & 0xFF) + bytes(self.rcon_password, ENCODING)
 
     def send_rcon_command(self, command, args=tuple(), fetch_response=True):
         """
@@ -171,13 +173,9 @@ class SampClient(object):
         :return list of lines responded from the server or None if fetch_response == False
         """
         command = build_rcon_command(command, args)
-        command_len = len(command)
-        rcon_payload = '{password}{command_length}{command}'.format(
-            password=self.rcon_password_bytes,
-            command_length=encode_bytes(command_len & 0xFF, command_len >> 8 & 0xFF),
-            command=command,
-        )
-        self.send_request(OPCODE_RCON, extras=rcon_payload, return_response=False)
+        command_length = encode_bytes(len(command) & 0xFF, len(command) >> 8 & 0xFF)
+        payload = self.rcon_password_bytes + command_length + command
+        self.send_request(OPCODE_RCON, extras=payload, return_response=False)
         if fetch_response:
             result = []
             while True:

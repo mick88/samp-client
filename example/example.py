@@ -5,7 +5,7 @@
 from __future__ import unicode_literals, absolute_import, print_function
 
 import sys
-
+from builtins import input
 from samp_client import constants
 from samp_client.client import SampClient
 
@@ -48,10 +48,10 @@ def details(client):
 
 def rcon(client):
     if client.rcon_password is None:
-        client.rcon_password = raw_input('RCON password:')
+        client.rcon_password = input('RCON password:')
     print('Enter rcon commands or leave blank to exit. Example: cmdlist')
     while True:
-        command = raw_input('RCON: ')
+        command = input('RCON: ')
         if not command:
             return
         for line in client.send_rcon_command(command):
@@ -75,18 +75,15 @@ x. RCON
             info=server_info,
         ))
 
-        option = raw_input('Select option: ')
-        if option == constants.OPCODE_INFO:
-            info(client)
-        elif option == constants.OPCODE_RULES:
-            rules(client)
-        elif option == constants.OPCODE_CLIENTS:
-            clients(client)
-        elif option == constants.OPCODE_CLIENTS_DETAILED:
-            details(client)
-        elif option == constants.OPCODE_RCON:
-            rcon(client)
-        else:
-            print('Unknown option, bye!')
+        options = {
+            'i': info,
+            'r': rules,
+            'c': clients,
+            'd': details,
+            'x': rcon,
+        }
+        option = input('Select option: ')
+        if option in options: options[option](client)
+        else: print('Unknown option, bye!')
 
 main(sys.argv[1:])
