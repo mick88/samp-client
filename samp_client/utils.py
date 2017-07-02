@@ -27,12 +27,14 @@ def encode_bytes(*args):
     integer values are encoded into their char values
     :return: bytestring representing all arguments joined together
     """
-    result = ''
+    result = b''
     for arg in args:
-        if isinstance(arg, basestring):
-            result += str(arg)
+        if isinstance(arg, bytes):
+            result += arg
+        elif isinstance(arg, str):
+            result += bytes(arg)
         elif isinstance(arg, int):
-            result += chr(arg)
+            result += bytes([arg])
     return result
 
 
@@ -42,6 +44,8 @@ def decode_int(string):
     """
     result = 0
     for n, c in enumerate(string):
+        if isinstance(c, str):
+            c = ord(c)
         result |= c << (8 * n)
     return result
 
@@ -57,7 +61,7 @@ def decode_string(string, len_pos, len_bytes=4):
     assert isinstance(len_pos, int)
     len_end = len_pos + len_bytes
     length = decode_int(string[len_pos:len_end])
-    return str(string[len_end:len_end + length])
+    return string[len_end:len_end + length].decode('utf-8')
 
 
 def build_rcon_command(command, args=None):

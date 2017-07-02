@@ -6,7 +6,7 @@ from samp_client import utils
 
 class UtilsTestCase(TestCase):
     def test_encode(self):
-        expected = chr(127) + chr(0) + chr(0) + chr(1)
+        expected = bytes(chr(127) + chr(0) + chr(0) + chr(1), 'utf-8')
         self.assertEqual(expected, utils.encode_bytes(127, 0, 0, 1))
 
     def test_decode_int_1(self):
@@ -14,30 +14,29 @@ class UtilsTestCase(TestCase):
         self.assertEqual(16, utils.decode_int(chr(16)))
         self.assertEqual(200, utils.decode_int(chr(200)))
 
-
     def test_decode_int_4(self):
-        self.assertEqual(7989, utils.decode_int('5\x1f\x00\x00'))
+        self.assertEqual(7989, utils.decode_int(b'5\x1f\x00\x00'))
 
     def test_decode_string(self):
-        input = '\x04Test+++'
+        input = b'\x04Test+++'
         expected = 'Test'
         result = utils.decode_string(input, 0, 1)
         self.assertEqual(expected, result)
 
     def test_decode_string_2(self):
-        input = '\x04\x00Test-----'
+        input = b'\x04\x00Test-----'
         expected = 'Test'
         result = utils.decode_string(input, 0, 2)
         self.assertEqual(expected, result)
 
     def test_decode_string_4(self):
-        input = '\x0f\x00\x00\x00Convoy Trucking===='
+        input = b'\x0f\x00\x00\x00Convoy Trucking===='
         expected = 'Convoy Trucking'
         result = utils.decode_string(input, 0, 4)
         self.assertEqual(expected, result)
 
     def test_decode_string_4_offset_4(self):
-        input = '    \x0f\x00\x00\x00Convoy Trucking\x00\x00'
+        input = b'    \x0f\x00\x00\x00Convoy Trucking\x00\x00'
         expected = 'Convoy Trucking'
         result = utils.decode_string(input, 4, 4)
         self.assertEqual(expected, result)
@@ -88,7 +87,7 @@ class UtilsTestCase(TestCase):
     def test_parse_server_var_string(self):
         var = utils.parse_server_var('gamemode0\t= "convoy"  (string)')
         self.assertEqual('gamemode0', var.name)
-        self.assertEqual(b'convoy', var.value)
+        self.assertEqual('convoy', var.value)
         self.assertIsInstance(var.value, str)
         self.assertFalse(var.read_only)
 
@@ -103,12 +102,12 @@ class UtilsTestCase(TestCase):
         var = utils.parse_server_var('filterscripts\t= "WeatherStreamer"  (string) (read-only)')
         self.assertTrue(var.read_only)
         self.assertEqual('filterscripts', var.name)
-        self.assertEqual(b'WeatherStreamer', var.value)
+        self.assertEqual('WeatherStreamer', var.value)
         self.assertIsInstance(var.value, str)
 
     def test_parse_server_var_ip_readonly(self):
         var = utils.parse_server_var('bind\t\t= "127.0.0.1"  (string) (read-only)')
         self.assertTrue(var.read_only)
         self.assertEqual('bind', var.name)
-        self.assertEqual(b'127.0.0.1', var.value)
+        self.assertEqual('127.0.0.1', var.value)
         self.assertIsInstance(var.value, str)
