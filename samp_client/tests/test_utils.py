@@ -42,27 +42,27 @@ class UtilsTestCase(TestCase):
         self.assertEqual(expected, result)
 
     def test_build_rcon_command(self):
-        self.assertEqual('cmdlist', utils.build_rcon_command('cmdlist'))
-        self.assertEqual('cmdlist', utils.build_rcon_command('cmdlist', args=[]))
-        self.assertEqual('cmdlist', utils.build_rcon_command('cmdlist', args=tuple()))
+        self.assertEqual(b'cmdlist', utils.build_rcon_command('cmdlist'))
+        self.assertEqual(b'cmdlist', utils.build_rcon_command('cmdlist', args=[]))
+        self.assertEqual(b'cmdlist', utils.build_rcon_command('cmdlist', args=tuple()))
 
     def test_build_rcon_command_string(self):
-        self.assertEqual('language Polish', utils.build_rcon_command('language', args='Polish'))
-        self.assertEqual('language Polish', utils.build_rcon_command('language', args=['Polish']))
+        self.assertEqual(b'language Polish', utils.build_rcon_command('language', args='Polish'))
+        self.assertEqual(b'language Polish', utils.build_rcon_command('language', args=['Polish']))
 
     def test_build_rcon_command_int(self):
-        self.assertEqual('kick 5', utils.build_rcon_command('kick', args=5))
-        self.assertEqual('kick 5', utils.build_rcon_command('kick', args=[5]))
-        self.assertEqual('kick 0', utils.build_rcon_command('kick', args=0))
-        self.assertEqual('kick 0', utils.build_rcon_command('kick', args=[0]))
+        self.assertEqual(b'kick 5', utils.build_rcon_command('kick', args=5))
+        self.assertEqual(b'kick 5', utils.build_rcon_command('kick', args=[5]))
+        self.assertEqual(b'kick 0', utils.build_rcon_command('kick', args=0))
+        self.assertEqual(b'kick 0', utils.build_rcon_command('kick', args=[0]))
 
     def test_build_rcon_command_bool(self):
-        self.assertEqual('test 1', utils.build_rcon_command('test', args=True))
-        self.assertEqual('test 0', utils.build_rcon_command('test', args=False))
+        self.assertEqual(b'test 1', utils.build_rcon_command('test', args=True))
+        self.assertEqual(b'test 0', utils.build_rcon_command('test', args=False))
 
     def test_build_rcon_command_float(self):
-        self.assertEqual('gravity 0.008', utils.build_rcon_command('gravity', args=0.008))
-        self.assertEqual('test 0.008', utils.build_rcon_command('test', args=0.008))
+        self.assertEqual(b'gravity 0.008', utils.build_rcon_command('gravity', args=0.008))
+        self.assertEqual(b'test 0.008', utils.build_rcon_command('test', args=0.008))
 
     def test_parse_server_var_int(self):
         var = utils.parse_server_var('ackslimit\t= 3000  (int)')

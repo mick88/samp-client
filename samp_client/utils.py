@@ -2,6 +2,8 @@ from __future__ import unicode_literals, absolute_import
 from future.builtins import bytes
 import re
 from past.builtins import basestring
+
+from samp_client.constants import ENCODING
 from samp_client.models import ServerVar
 
 VAR_PATTERN = re.compile(r'\s*'.join((
@@ -78,7 +80,7 @@ def build_rcon_command(command, args=None):
             args = args,
         if len(args):
             command += ' ' + ' '.join(str(arg) for arg in args)
-    return command
+    return command if isinstance(command, bytes) else bytes(command, ENCODING)
 
 
 def parse_server_var(variable):
