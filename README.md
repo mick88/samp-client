@@ -2,7 +2,9 @@
 
 ## RCON and query client library for  Python
 
-A modern Python library for querying and managing SA-MP servers. 
+A modern Python library for querying and managing SA-MP servers.
+ 
+Supported Python version 2.7, 3.4, 3.5 and 3.6
 
 ### Installation
 ```bash
