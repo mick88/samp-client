@@ -164,7 +164,7 @@ class SampClient(object):
         Checks whether server is online
         :return: True if online, False if offline (connection error)
         """
-        value = 'test'
+        value = b'test'
         try:
             return self.probe_server(value=value) == value
         except ConnectionError:
