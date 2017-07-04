@@ -24,10 +24,13 @@ class SampClient(object):
         self.rcon_password = rcon_password
 
     def connect(self):
-        self.address = socket.gethostbyname(self.address)
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.settimeout(self.timeout)
-        return self
+        try:
+            self.address = socket.gethostbyname(self.address)
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.socket.settimeout(self.timeout)
+            return self
+        except socket.error as e:
+            raise ConnectionError(e)
 
     def disconnect(self):
         self.socket.close()

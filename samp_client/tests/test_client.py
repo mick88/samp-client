@@ -4,6 +4,7 @@ from unittest import TestCase
 from future.builtins import str
 
 from samp_client.client import SampClient
+from samp_client.exceptions import ConnectionError
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail
 
 
@@ -76,3 +77,7 @@ class ClientTestCase(TestCase):
         # Will fail if there's a SA-MP server running on port 6666 on localhost
         with SampClient(address='localhost', port=6666) as client:
             self.assertFalse(client.is_online())
+
+    def test_is_invalid_domain(self):
+        client = SampClient(address='localhostinvalid', port=6666)
+        self.assertRaises(ConnectionError, client.connect)
