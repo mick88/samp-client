@@ -2,7 +2,7 @@ from __future__ import unicode_literals, absolute_import
 
 import socket
 from past.builtins import basestring
-from future.builtins import bytes
+from future.builtins import bytes, str
 from samp_client.constants import *
 from samp_client.exceptions import SampError, RconError, InvalidRconPassword, ConnectionError
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail, RConPlayer
@@ -146,7 +146,8 @@ class SampClient(object):
         return result
 
     def probe_server(self, value='ping'):
-        value = bytes(value, encoding=ENCODING)
+        if isinstance(value, str):
+            value = bytes(value, ENCODING)
         assert len(value) == 4, 'Value must be exactly 4 characters'
         response = self.send_request(OPCODE_PSEUDORANDOM, extras=value)
         return response
