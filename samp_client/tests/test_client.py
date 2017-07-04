@@ -70,6 +70,12 @@ class ClientTestCase(TestCase):
             self.assertIsInstance(client.id, int)
             return # only need to test first yielded client
 
+    def test_probe_server_unicode(self):
+        self.assertEqual(b'test', self.client.probe_server(u'test'))
+
+    def test_probe_server_bytestring(self):
+        self.assertEqual(b'test', self.client.probe_server(b'test'))
+
     def test_is_online(self):
         self.assertTrue(self.client.is_online())
 
