@@ -4,7 +4,7 @@ import socket
 from past.builtins import basestring
 from future.builtins import bytes
 from samp_client.constants import *
-from samp_client.exceptions import SampError, RconError, InvalidRconPassword
+from samp_client.exceptions import SampError, RconError, InvalidRconPassword, ConnectionError
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail, RConPlayer
 from samp_client.utils import encode_bytes, decode_int, decode_string, build_rcon_command, parse_server_var
 
@@ -60,6 +60,8 @@ class SampClient(object):
             return response[11:] if strip_header else response
         except socket.timeout as e:
             pass
+        except socket.error as e:
+            raise ConnectionError(e)
 
     def get_server_info(self):
         response = self.send_request(OPCODE_INFO)
