@@ -68,3 +68,11 @@ class ClientTestCase(TestCase):
             self.assertIsInstance(client.ping, int)
             self.assertIsInstance(client.id, int)
             return # only need to test first yielded client
+
+    def test_is_online(self):
+        self.assertTrue(self.client.is_online())
+
+    def test_is_offline(self):
+        # Will fail if there's a SA-MP server running on port 6666 on localhost
+        with SampClient(address='localhost', port=6666) as client:
+            self.assertFalse(client.is_online())

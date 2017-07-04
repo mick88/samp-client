@@ -143,6 +143,7 @@ class SampClient(object):
         return result
 
     def probe_server(self, value='ping'):
+        value = bytes(value, encoding=ENCODING)
         assert len(value) == 4, 'Value must be exactly 4 characters'
         response = self.send_request(OPCODE_PSEUDORANDOM, extras=value)
         return response
@@ -154,6 +155,17 @@ class SampClient(object):
         response = self.probe_server(value)
         if response != value:
             raise SampError('Server returned {} instead of {}'.format(response, value))
+
+    def is_online(self):
+        """
+        Checks whether server is online
+        :return: True if online, False if offline (connection error)
+        """
+        value = 'test'
+        try:
+            return self.probe_server(value=value) == value
+        except ConnectionError:
+            return False
 
     @property
     def rcon_password_bytes(self):
