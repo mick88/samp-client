@@ -2,7 +2,7 @@ from __future__ import unicode_literals, absolute_import
 
 import socket
 from past.builtins import basestring
-from future.builtins import bytes
+from future.builtins import bytes, str
 from samp_client.constants import *
 from samp_client.exceptions import SampError, RconError, InvalidRconPassword, ConnectionError
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail, RConPlayer
@@ -24,10 +24,13 @@ class SampClient(object):
         self.rcon_password = rcon_password
 
     def connect(self):
-        self.address = socket.gethostbyname(self.address)
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.settimeout(self.timeout)
-        return self
+        try:
+            self.address = socket.gethostbyname(self.address)
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.socket.settimeout(self.timeout)
+            return self
+        except socket.error as e:
+            raise ConnectionError(e)
 
     def disconnect(self):
         self.socket.close()
@@ -143,6 +146,8 @@ class SampClient(object):
         return result
 
     def probe_server(self, value='ping'):
+        if isinstance(value, str):
+            value = bytes(value, ENCODING)
         assert len(value) == 4, 'Value must be exactly 4 characters'
         response = self.send_request(OPCODE_PSEUDORANDOM, extras=value)
         return response
@@ -154,6 +159,17 @@ class SampClient(object):
         response = self.probe_server(value)
         if response != value:
             raise SampError('Server returned {} instead of {}'.format(response, value))
+
+    def is_online(self):
+        """
+        Checks whether server is online
+        :return: True if online, False if offline (connection error)
+        """
+        value = b'test'
+        try:
+            return self.probe_server(value=value) == value
+        except ConnectionError:
+            return False
 
     @property
     def rcon_password_bytes(self):
