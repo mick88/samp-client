@@ -60,6 +60,9 @@ def rcon(client):
 
 def main(args):
     with SampClient(*args) as client:
+        if not client.is_online():
+            print('Server {}:{} is offline'.format(*args))
+            exit(1)
         server_info = client.get_server_info()
         print("""Connected to {info.hostname}. 
 Currently {info.players}/{info.max_players} players online.
@@ -86,4 +89,7 @@ x. RCON
         if option in options: options[option](client)
         else: print('Unknown option, bye!')
 
+if len(sys.argv) < 3:
+    print('Usage: python example.py [server_address] [port]')
+    exit(1)
 main(sys.argv[1:])
