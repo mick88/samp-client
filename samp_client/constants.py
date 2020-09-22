@@ -1,6 +1,6 @@
 from __future__ import unicode_literals, absolute_import
 
-ENCODING = 'latin-1'
+ENCODING = 'cp1252'
 MSG_PREFIX = b'SAMP'
 
 # Opcode definitions

@@ -63,7 +63,7 @@ def decode_string(string, len_pos, len_bytes=4):
     assert isinstance(len_pos, int)
     len_end = len_pos + len_bytes
     length = decode_int(string[len_pos:len_end])
-    return string[len_end:len_end + length].decode('utf-8')
+    return string[len_end:len_end + length].decode(ENCODING)
 
 
 def build_rcon_command(command, args=None):

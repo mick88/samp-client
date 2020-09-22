@@ -2,11 +2,12 @@ from __future__ import unicode_literals, absolute_import
 from unittest.case import TestCase
 from future.builtins import bytes
 from samp_client import utils
+from samp_client.constants import ENCODING
 
 
 class UtilsTestCase(TestCase):
     def test_encode(self):
-        expected = bytes(chr(127) + chr(0) + chr(0) + chr(1), 'utf-8')
+        expected = bytes(chr(127) + chr(0) + chr(0) + chr(1), ENCODING)
         self.assertEqual(expected, utils.encode_bytes(127, 0, 0, 1))
 
     def test_decode_int_1(self):
@@ -21,6 +22,13 @@ class UtilsTestCase(TestCase):
         input = b'\x04Test+++'
         expected = 'Test'
         result = utils.decode_string(input, 0, 1)
+        self.assertEqual(expected, result)
+
+    def test_decode_string__unicode(self):
+        input = b'\x00\xa2\x00,\x01%\x00\x00\x00- Excellent Dreams Role Play\x99 | VOICE'
+        expected = u'- Excellent Dreams Role Play™ | VOICE'
+
+        result = utils.decode_string(input, 0, 2)
         self.assertEqual(expected, result)
 
     def test_decode_string_2(self):
