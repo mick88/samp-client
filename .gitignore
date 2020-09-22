@@ -12,3 +12,5 @@ pip-selfcheck.json
 /tcl/
 /LICENSE.txt
 /samp_client.egg-info/
+/venv/
+/.tox/
