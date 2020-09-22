@@ -7,3 +7,17 @@ Version 2.1
 - Implemented is_online() client method
 - Handle timeout from server playerlist response by returning empty list
 - fix string encoding
+
+Version 2.0
+------------
+- Added support for Python 3
+
+Version 1.1
+-----------
+- Implemented custom exceptions
+
+Version 1.0
+-----------
+- Initial release with support for SA-MP API and RCON commands
+- Added example script
+- Support Python 2.7
