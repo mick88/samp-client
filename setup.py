@@ -26,4 +26,8 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
+    project_urls={
+        'Source': 'https://github.com/mick88/samp-client',
+        'Tracker': 'https://github.com/mick88/samp-client/issues',
+    },
 )
