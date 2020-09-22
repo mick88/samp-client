@@ -6,6 +6,7 @@ class MockSocket(object):
         b'SAMP3\xfe\x82\x0ea\x1ei': b'\x00\x0c\x00d\x00\x0f\x00\x00\x00Convoy Trucking\x15\x00\x00\x00Convoy Trucking 3.4.4\x07\x00\x00\x00English',
         b'SAMP3\xfe\x82\x0ea\x1er': b'\x06\x00\x07lagcomp\x02On\x07mapname\x0bSan Andreas\x07version\x080.3.7-R2\x07weather\x0210\x06weburl\x16www.convoytrucking.net\tworldtime\x0518:00',
     }
+    response_prefix = b'\0' * 11
 
     def __init__(self, *args, **kwargs):
         pass
@@ -17,7 +18,10 @@ class MockSocket(object):
         pass
 
     def sendto(self, data, *args, **kwargs):
-        self.response = self.responses[data]
+        self.request = data
 
     def recv(self, bufsize):
-        return self.response
+        try:
+            return self.response_prefix + self.responses[self.request]
+        except KeyError:
+            raise ConnectionError(10054, 'Connection error')
