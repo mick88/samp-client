@@ -107,9 +107,13 @@ class SampClient(object):
 
     def get_server_clients(self):
         response = self.send_request(OPCODE_CLIENTS)
+        result = []
+        if response is None:
+            # SA-MP server will return null if there's a lot of players
+            # We'll handle this by returning an empty list instead to avoid type error.
+            return result
         num_clients = decode_int(response[:2])
         offset = 2
-        result = []
         for n in range(num_clients):
             name = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(name)
@@ -124,9 +128,13 @@ class SampClient(object):
 
     def get_server_clients_detailed(self):
         response = self.send_request(OPCODE_CLIENTS_DETAILED)
+        result = []
+        if response is None:
+            # SA-MP server will return null if there's a lot of players
+            # We'll handle this by returning an empty list instead to avoid type error.
+            return result
         num_clients = decode_int(response[:2])
         offset = 2
-        result = []
         for n in range(num_clients):
             player_id = decode_int(response[offset:offset])
             offset += 1
