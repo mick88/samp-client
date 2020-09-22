@@ -28,7 +28,7 @@ class UtilsTestCase(TestCase):
         input = b'\x00\xa2\x00,\x01%\x00\x00\x00- Excellent Dreams Role Play\x99 | VOICE'
         expected = u'- Excellent Dreams Role Play™ | VOICE'
 
-        result = utils.decode_string(input, 0, 2)
+        result = utils.decode_string(input, 0, 9)
         self.assertEqual(expected, result)
 
     def test_decode_string_2(self):
