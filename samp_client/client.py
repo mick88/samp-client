@@ -15,6 +15,7 @@ class SampClient(object):
     http://wiki.sa-mp.com/wiki/Query_Mechanism
     """
     timeout = 1.0
+    socket_cls = socket.socket
 
     def __init__(self, address='127.0.0.1', port=7777, rcon_password=None):
         super(SampClient, self).__init__()
@@ -26,7 +27,7 @@ class SampClient(object):
     def connect(self):
         try:
             self.address = socket.gethostbyname(self.address)
-            self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.socket = self.socket_cls(socket.AF_INET, socket.SOCK_DGRAM)
             self.socket.settimeout(self.timeout)
             return self
         except socket.error as e:
