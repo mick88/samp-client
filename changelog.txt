@@ -1,4 +1,4 @@
-Version 2.0.4
+Version 2.1
 -------------
 - Implemented is_online() client method
 - Handle timeout from server playerlist response by returning empty list
