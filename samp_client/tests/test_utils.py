@@ -1,3 +1,4 @@
+# coding=utf-8
 from unittest.case import TestCase
 from samp_client import utils
 from samp_client.constants import ENCODING
