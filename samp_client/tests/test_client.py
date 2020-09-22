@@ -14,7 +14,7 @@ class ClientTestCase(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
-        socket.connect = MockSocket
+        SampClient.socket_cls = MockSocket
 
     def setUp(self):
         super(ClientTestCase, self).setUp()
