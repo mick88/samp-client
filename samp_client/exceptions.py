@@ -13,7 +13,8 @@ class InvalidRconPassword(RconError):
 class ConnectionError(SampError):
     def __init__(self, socket_error):
         self.socket_error = socket_error
-        self.err_no, self.message = socket_error.args
+        self.err_no = socket_error.args[0]
+        self.message = socket_error.args[1]
         if self.err_no == 10054:
             args = 'Server appears to be offline'
         elif self.err_no == 11001:

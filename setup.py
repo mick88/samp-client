@@ -8,7 +8,7 @@ except:
 
 setup(
     name='samp-client',
-    version='2.1',
+    version='2.1.2',
     packages=['samp_client'],
     url='https://github.com/mick88/samp-client',
     license='MIT',
@@ -20,8 +20,13 @@ setup(
     long_description=long_description,
     classifiers=[
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
+    project_urls={
+        'Source': 'https://github.com/mick88/samp-client',
+        'Tracker': 'https://github.com/mick88/samp-client/issues',
+    },
 )
