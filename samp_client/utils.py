@@ -22,7 +22,7 @@ VAR_TYPES = {
 def encode_bytes(*args):
     """
     Encodes values into a byte string
-    strings are left as-is
+    bytestrings are left as-is
     integer values are encoded into their char values
     :return: bytestring representing all arguments joined together
     """
@@ -31,7 +31,7 @@ def encode_bytes(*args):
         if isinstance(arg, bytes):
             result += arg
         elif isinstance(arg, str):
-            result += bytes(arg)
+            result += bytes(arg, ENCODING)
         elif isinstance(arg, int):
             result += bytes([arg])
     return result
