@@ -1,6 +1,4 @@
-from future.builtins import bytes
 import re
-from past.builtins import basestring
 
 from samp_client.constants import ENCODING
 from samp_client.models import ServerVar
@@ -75,7 +73,7 @@ def build_rcon_command(command, args=None):
         # Bool check must come first because bool extends int
         if isinstance(args, bool):
             args = int(args),
-        elif isinstance(args, (basestring, int, float)):
+        elif isinstance(args, (str, bytes, int, float)):
             args = args,
         if len(args):
             command += ' ' + ' '.join(str(arg) for arg in args)
