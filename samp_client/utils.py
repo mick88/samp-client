@@ -1,4 +1,3 @@
-from __future__ import unicode_literals, absolute_import
 from future.builtins import bytes
 import re
 from past.builtins import basestring

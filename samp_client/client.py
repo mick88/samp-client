@@ -1,5 +1,3 @@
-from __future__ import unicode_literals, absolute_import
-
 import socket
 from past.builtins import basestring
 from future.builtins import bytes, str

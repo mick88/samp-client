@@ -1,5 +1,3 @@
-from __future__ import unicode_literals, absolute_import
-
 ENCODING = 'cp1252'
 MSG_PREFIX = b'SAMP'
 

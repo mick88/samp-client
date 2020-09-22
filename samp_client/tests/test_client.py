@@ -1,5 +1,3 @@
-from __future__ import unicode_literals, absolute_import
-
 from unittest import TestCase
 from future.builtins import str
 

@@ -2,8 +2,6 @@
 # Usage: `python example.py (address=localhost) (port=7777) (rcon_password)`
 # Example script demonstrating the use of this library
 #
-from __future__ import unicode_literals, absolute_import, print_function
-
 import sys
 from builtins import input
 from samp_client import constants

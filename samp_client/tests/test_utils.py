@@ -1,4 +1,3 @@
-from __future__ import unicode_literals, absolute_import
 from unittest.case import TestCase
 from future.builtins import bytes
 from samp_client import utils
