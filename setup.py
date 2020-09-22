@@ -18,4 +18,11 @@ setup(
     description='SA-MP API client for python supporting both query and RCON APIs',
     long_description_content_type='text/markdown',
     long_description=long_description,
+    classifiers=[
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.2',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+    ],
 )
