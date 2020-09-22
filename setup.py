@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-from distutils.core import setup
+from setuptools import setup
+
 try:
     long_description = open('README.md', 'r').read()
 except:
@@ -15,5 +16,6 @@ setup(
     author_email='contact@michaldabski.com',
     install_requires=['future'],
     description='SA-MP API client for python supporting both query and RCON APIs',
+    long_description_content_type='text/markdown',
     long_description=long_description,
 )
