@@ -3,14 +3,15 @@ from unittest import TestCase
 from samp_client.client import SampClient
 from samp_client.exceptions import ConnectionError
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail
+from samp_client.tests.mock import MockSocket
 
 
 class ClientTestCase(TestCase):
     def setUp(self):
         super(ClientTestCase, self).setUp()
         # These tests depend on Convoy Trucking server being up
-        # TODO: mock the server and hardcode fake responses
         self.client = SampClient(address='server.convoytrucking.net')
+        self.client.socket_cls = MockSocket
         self.client.connect()
 
     def tearDown(self):
