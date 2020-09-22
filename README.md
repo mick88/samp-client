@@ -4,7 +4,7 @@
 
 A modern Python library for querying and managing SA-MP servers.
  
-Supported Python version 2.7, 3.4, 3.5 and 3.6
+Supported Python version 3.4 to 3.7
 
 ### Installation
 ```bash
@@ -18,7 +18,7 @@ The library can be easily interfaced using a single `SampClient` class:
 from samp_client.client import SampClient
 
 with SampClient(address='localhost', port=7777) as client:
-    print client.get_server_info()
+    print(client.get_server_info())
 ```
 
 The library also allows you to run RCON commands as well as queries:
@@ -35,13 +35,13 @@ from samp_client.client import SampClient
 
 with SampClient(address='localhost', port=7777, rcon_password='password') as client:
     info = client.get_server_info()
-    print info
+    print(info)
     # ServerInfo(password=True, players=9, max_players=100, hostname='Convoy Trucking', gamemode='Convoy Trucking 3.1.1', language='English')
-    print info.gamemode
+    print(info.gamemode)
     # 'Convoy Trucking 3.1.1'
-    print client.rcon_get_hostname()
+    print(client.rcon_get_hostname())
     # ServerVar(name='hostname', value='Convoy Trucking', read_only=False)
-    print client.rcon_players()[0].ping
+    print(client.rcon_players()[0].ping)
     # 26
 ```
 
