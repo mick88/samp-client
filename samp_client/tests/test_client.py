@@ -1,8 +1,4 @@
-from __future__ import unicode_literals, absolute_import
-
-import socket
 from unittest import TestCase
-from future.builtins import str
 
 from samp_client.client import SampClient
 from samp_client.exceptions import ConnectionError

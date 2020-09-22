@@ -1,8 +1,4 @@
-from __future__ import unicode_literals, absolute_import
-
 import socket
-from past.builtins import basestring
-from future.builtins import bytes, str
 from samp_client.constants import *
 from samp_client.exceptions import SampError, RconError, InvalidRconPassword, ConnectionError
 from samp_client.models import ServerInfo, Rule, Client, ClientDetail, RConPlayer
@@ -19,7 +15,7 @@ class SampClient(object):
 
     def __init__(self, address='127.0.0.1', port=7777, rcon_password=None):
         super(SampClient, self).__init__()
-        assert isinstance(address, basestring)
+        assert isinstance(address, str)
         self.address = address
         self.port = int(port)
         self.rcon_password = rcon_password
