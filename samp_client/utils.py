@@ -63,6 +63,8 @@ def build_rcon_command(command, args=None):
     :param command: the command string
     :param args: list of arguments or a single argument (bool, string or int)
     """
+    if isinstance(command, str):
+        command = command.encode(ENCODING)
     if args is not None:
         # Bool check must come first because bool extends int
         if isinstance(args, bool):
@@ -70,8 +72,9 @@ def build_rcon_command(command, args=None):
         elif isinstance(args, (str, bytes, int, float)):
             args = args,
         if len(args):
-            command += ' ' + ' '.join(str(arg) for arg in args)
-    return command if isinstance(command, bytes) else bytes(command, ENCODING)
+            args = map(str, args)
+            command += b' ' + b' '.join(bytes(arg, ENCODING) for arg in args)
+    return command
 
 
 def parse_server_var(variable):
