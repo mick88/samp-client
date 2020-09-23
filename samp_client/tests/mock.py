@@ -52,6 +52,8 @@ class MockSocket(object):
         b'SAMP\x7f\x00\x00\x01a\x1ex\x08\x00password\x07\x00varlist': [b'\x12\x00Console Variables:', b'\x19\x00  ackslimit\t= 3000  (int)', b'\x16\x00  announce\t= 0  (bool)', b'"\x00  bind\t\t= ""  (string) (read-only)', b'\x18\x00  chatlogging\t= 1  (int)', b'\x18\x00  conncookies\t= 1  (int)', b'\x1e\x00  connseedtime\t= 300000  (int)', b'\x1a\x00  cookielogging\t= 0  (int)', b'\x1b\x00  db_log_queries\t= 0  (int)', b'\x17\x00  db_logging\t= 0  (int)', b'9\x00  filterscripts\t= "WeatherStreamer"  (string) (read-only)', b' \x00  gamemode0\t= "convoy"  (string)', b'\x1a\x00  gamemode1\t= ""  (string)', b'\x1b\x00  gamemode10\t= ""  (string)', b'\x1b\x00  gamemode11\t= ""  (string)', b'\x1b\x00  gamemode12\t= ""  (string)', b'\x1b\x00  gamemode13\t= ""  (string)', b'\x1b\x00  gamemode14\t= ""  (string)', b'\x1b\x00  gamemode15\t= ""  (string)', b'\x1a\x00  gamemode2\t= ""  (string)', b'\x1a\x00  gamemode3\t= ""  (string)', b'\x1a\x00  gamemode4\t= ""  (string)', b'\x1a\x00  gamemode5\t= ""  (string)', b'\x1a\x00  gamemode6\t= ""  (string)', b'\x1a\x00  gamemode7\t= ""  (string)', b'\x1a\x00  gamemode8\t= ""  (string)', b'\x1a\x00  gamemode9\t= ""  (string)', b'0\x00  gamemodetext\t= "Convoy Trucking DEV"  (string)', b'\x1d\x00  gravity\t= "0.008"  (string)', b'(\x00  hostname\t= "Convoy Trucking"  (string)', b'$\x00  incar_rate\t= 40  (int) (read-only)', b'-\x00  lagcomp\t= "On"  (string) (read-only) (rule)', b'$\x00  lagcompmode\t= 1  (int) (read-only)', b' \x00  language\t= "English"  (string)', b'\x15\x00  lanmode\t= 0  (bool)', b'\x18\x00  logqueries\t= 0  (bool)', b':\x00  logtimeformat\t= "[%d %b %H:%M:%S]"  (string) (read-only)', b'*\x00  mapname\t= "San Andreas"  (string) (rule)', b'\x13\x00  maxnpc\t= 0  (int)', b'$\x00  maxplayers\t= 10  (int) (read-only)', b' \x00  messageholelimit\t= 3000  (int)', b'\x1c\x00  messageslimit\t= 500  (int)', b'\x1e\x00  minconnectiontime\t= 0  (int)', b'\x14\x00  myriad\t= 0  (bool)', b'#\x00  nosign\t= ""  (string) (read-only)', b'%\x00  onfoot_rate\t= 40  (int) (read-only)', b'\x14\x00  output\t= 0  (bool)', b'\x19\x00  password\t= ""  (string)', b'\x1e\x00  playertimeout\t= 10000  (int)', b'.\x00  plugins\t= "CVector.so"  (string) (read-only)', b'!\x00  port\t\t= 7777  (int) (read-only)', b'\x14\x00  query\t\t= 1  (bool)', b'\x13\x00  rcon\t\t= 1  (bool)', b'&\x00  rcon_password\t= "password"  (string)', b'\x13\x00  sleep\t\t= 5  (int)', b"'\x00  stream_distance\t= 300.000000  (float)", b'\x1b\x00  stream_rate\t= 1000  (int)', b'\x17\x00  timestamp\t= 1  (bool)', b'3\x00  version\t= "0.3.7-R2"  (string) (read-only) (rule)', b'%\x00  weapon_rate\t= 40  (int) (read-only)', b'!\x00  weather\t= "10"  (string) (rule)', b',\x00  weburl\t= "localhost:8000"  (string) (rule)', b'&\x00  worldtime\t= "12:00"  (string) (rule)', b'\x00\x00'],
     }
     response_prefix = b'SAMP3\xfe\x82\x0ea\x1ex'
+    # Keeps position of next response if response is in a list
+    counter = 0
 
     def __init__(self, *args, **kwargs):
         self.connected = True
@@ -66,6 +68,7 @@ class MockSocket(object):
     def sendto(self, data, *args, **kwargs):
         assert self.connected
         self.request = data
+        self.counter = 0
 
     def recv(self, bufsize):
         assert self.connected
@@ -75,7 +78,8 @@ class MockSocket(object):
                 value = self.responses[self.request]
                 if isinstance(value, list):
                     try:
-                        value = value.pop(0) or b''
+                        value = value[self.counter] or b''
+                        self.counter += 1
                     except IndexError:
                         value = b''
                 response += value
