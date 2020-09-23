@@ -199,7 +199,7 @@ class MockSocket(object):
             if self.request:
                 value = self.responses[self.request]
                 if isinstance(value, list):
-                    value = value.pop(0)
+                    value = value.pop(0) or b''
                 response += value
             return response
         except KeyError:
