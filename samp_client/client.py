@@ -78,11 +78,11 @@ class SampClient(object):
         )
 
     def get_server_rules(self):
+        """ Iterate over server rules """
         response = self.send_request(OPCODE_RULES)
         num_rules = decode_int(response[:2])
         offset = 2
-        result = []
-        for n in range(num_rules):
+        for _ in range(num_rules):
             name = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(name)
             value = decode_string(response, offset, len_bytes=1)
@@ -91,22 +91,16 @@ class SampClient(object):
                 name=str(name),
                 value=value,
             )
-            result.append(rule)
-        return result
+            yield rule
 
     def get_server_rules_dict(self):
         return {rule.name: rule.value for rule in self.get_server_rules()}
 
     def get_server_clients(self):
         response = self.send_request(OPCODE_CLIENTS)
-        result = []
-        if response is None:
-            # SA-MP server will return null if there's a lot of players
-            # We'll handle this by returning an empty list instead to avoid type error.
-            return result
         num_clients = decode_int(response[:2])
         offset = 2
-        for n in range(num_clients):
+        for _ in range(num_clients):
             name = decode_string(response, offset, len_bytes=1)
             offset += 1 + len(name)
             score = decode_int(response[offset:offset + 4])
@@ -115,19 +109,13 @@ class SampClient(object):
                 name=name,
                 score=score,
             )
-            result.append(client)
-        return result
+            yield client
 
     def get_server_clients_detailed(self):
         response = self.send_request(OPCODE_CLIENTS_DETAILED)
-        result = []
-        if response is None:
-            # SA-MP server will return null if there's a lot of players
-            # We'll handle this by returning an empty list instead to avoid type error.
-            return result
         num_clients = decode_int(response[:2])
         offset = 2
-        for n in range(num_clients):
+        for _ in range(num_clients):
             player_id = decode_int(response[offset:offset])
             offset += 1
             name = decode_string(response, offset, len_bytes=1)
@@ -142,15 +130,13 @@ class SampClient(object):
                 score=score,
                 ping=ping,
             )
-            result.append(detail)
-        return result
+            yield detail
 
     def probe_server(self, value='ping'):
         if isinstance(value, str):
             value = bytes(value, ENCODING)
         assert len(value) == 4, 'Value must be exactly 4 characters'
-        response = self.send_request(OPCODE_PSEUDORANDOM, extras=value)
-        return response
+        return self.send_request(OPCODE_PSEUDORANDOM, extras=value)
 
     def validate_server(self, value='ping'):
         """
