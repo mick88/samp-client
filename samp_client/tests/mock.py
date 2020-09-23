@@ -74,7 +74,10 @@ class MockSocket(object):
             if self.request:
                 value = self.responses[self.request]
                 if isinstance(value, list):
-                    value = value.pop(0) or b''
+                    try:
+                        value = value.pop(0) or b''
+                    except IndexError:
+                        value = b''
                 response += value
             return response
         except KeyError:
