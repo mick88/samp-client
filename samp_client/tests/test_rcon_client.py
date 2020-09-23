@@ -66,7 +66,7 @@ class RconClientTestCase(TestCase):
         ServerVar(name='weapon_rate', value=40, read_only=True),
         ServerVar(name='weather', value='10', read_only=False),
         ServerVar(name='weburl', value='localhost:8000', read_only=False),
-        ServerVar(name='worldtime', value='10:00', read_only=False),
+        ServerVar(name='worldtime', value='12:00', read_only=False),
     ]
 
     def setUp(self):
@@ -218,7 +218,7 @@ class RconClientTestCase(TestCase):
 
     def test_rcon_players(self):
         response = self.client.rcon_players()
-        self.assertEqual(response, [RConPlayer(id=0, name='mick88', ping=15, ip='172.18.0.1')])
+        self.assertEqual(response, [RConPlayer(id=0, name='mick88', ping=15, ip='172.19.0.1')])
 
     def test_rcon_gravity(self):
         response = self.client.rcon_gravity(0.008)
