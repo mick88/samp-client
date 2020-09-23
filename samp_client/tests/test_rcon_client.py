@@ -1,8 +1,7 @@
 from unittest import TestCase
 
 from samp_client.client import SampClient
-from samp_client.exceptions import SampError, InvalidRconPassword, RconError
-from samp_client.models import ServerInfo, Rule, Client, ClientDetail
+from samp_client.exceptions import InvalidRconPassword, RconError
 from samp_client.tests.mock import MockSocket
 
 

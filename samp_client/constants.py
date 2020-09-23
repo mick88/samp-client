@@ -9,6 +9,7 @@ OPCODE_CLIENTS_DETAILED = b'd'
 OPCODE_RCON = b'x'
 OPCODE_PSEUDORANDOM = b'p'
 
+# RCON commands
 RCON_CMDLIST = b'cmdlist'
 RCON_VARLIST = b'varlist'
 RCON_EXIT = b'exit'

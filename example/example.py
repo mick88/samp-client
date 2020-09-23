@@ -4,7 +4,7 @@
 #
 import sys
 from builtins import input
-from samp_client import constants
+
 from samp_client.client import SampClient
 
 
@@ -86,6 +86,7 @@ x. RCON
         option = input('Select option: ')
         if option in options: options[option](client)
         else: print('Unknown option, bye!')
+
 
 if len(sys.argv) < 3:
     print('Usage: python example.py [server_address] [port]')
