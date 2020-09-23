@@ -41,7 +41,7 @@ class SampClient(object):
             self.disconnect()
 
     def send_request(self, opcode, extras=b'', return_response=True):
-        ip_address = encode_bytes(*[(int(n)) for n in self.address.split('.')])
+        ip_address = encode_bytes(*map(int, self.address.split('.')))
         port_number = encode_bytes(self.port & 0xFF, self.port >> 8 & 0xFF)
         body = MSG_PREFIX \
                + ip_address \
