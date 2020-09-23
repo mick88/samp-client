@@ -159,7 +159,7 @@ class RconClientTestCase(TestCase):
     def test_rcon_kick(self):
         response = self.client.rcon_kick(0)
         self.assertEqual(response, [
-            'mick88 <#0 - 172.18.0.1> has been kicked.',
+            'mick88 <#0 - 172.19.0.1> has been kicked.',
             'Logged time spent online for mick88: 0 min',
             'mick88 left the server (Kicked)',
             'wanted level set to 0',
@@ -173,7 +173,7 @@ class RconClientTestCase(TestCase):
     def test_rcon_ban(self):
         response = self.client.rcon_ban(0)
         self.assertEqual(response, [
-            'mick88 <#0 - 172.18.0.1> has been banned.',
+            'mick88 <#0 - 172.19.0.1> has been banned.',
             'Logged time spent online for mick88: 0 min',
             'mick88 left the server (Kicked)',
             'wanted level set to 0',
@@ -182,7 +182,7 @@ class RconClientTestCase(TestCase):
 
     def test_rcon_ban__invalid(self):
         response = self.client.rcon_ban(999)
-        self.assertIsNone(response)
+        self.assertEqual(response, [])
 
     def test_rcon_banip(self):
         response = self.client.rcon_banip('192.168.1.1')
@@ -267,7 +267,7 @@ class RconClientTestCase(TestCase):
     def test_rcon_get_password(self):
         response = self.client.rcon_get_password()
         # Server has no password
-        self.assertIsNone(response)
+        self.assertEqual(response, ServerVar(name='password', value='', read_only=False))
 
     def test_rcon_set_password(self):
         response = self.client.rcon_set_password('pass')
@@ -275,7 +275,7 @@ class RconClientTestCase(TestCase):
 
     def test_rcon_get_messageslimit(self):
         response = self.client.rcon_get_messageslimit()
-        self.assertEqual(ServerVar(name='messageslimit', value=500, read_only=False))
+        self.assertEqual(response, ServerVar(name='messageslimit', value=500, read_only=False))
 
     def test_rcon_set_messageslimit(self):
         response = self.client.rcon_set_messageslimit(200)
