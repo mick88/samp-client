@@ -23,6 +23,7 @@ class SampClient(object):
     def connect(self):
         try:
             self.address = socket.gethostbyname(self.address)
+            self.header = MSG_PREFIX + encode_bytes(*map(int, self.address.split('.'))) + encode_bytes(self.port & 0xFF, self.port >> 8 & 0xFF)
             self.socket = self.socket_cls(socket.AF_INET, socket.SOCK_DGRAM)
             self.socket.settimeout(self.timeout)
             return self
@@ -41,13 +42,7 @@ class SampClient(object):
             self.disconnect()
 
     def send_request(self, opcode, extras=b'', return_response=True):
-        ip_address = encode_bytes(*[(int(n)) for n in self.address.split('.')])
-        port_number = encode_bytes(self.port & 0xFF, self.port >> 8 & 0xFF)
-        body = MSG_PREFIX \
-               + ip_address \
-               + port_number \
-               + opcode \
-               + extras
+        body = self.header + opcode + extras
         self.socket.sendto(body, (self.address, self.port))
 
         if return_response:
@@ -210,9 +205,9 @@ class SampClient(object):
                     result.append(line.lstrip())
                 else:
                     break
-        if len(result) == 1 and result[0] == 'Invalid RCON password.':
-            raise InvalidRconPassword
-        return result
+            if len(result) == 1 and result[0] == 'Invalid RCON password.':
+                raise InvalidRconPassword
+            return result
 
     def rcon_cmdlist(self):
         """ List of rcon commands """

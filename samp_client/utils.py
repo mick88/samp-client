@@ -37,16 +37,10 @@ def encode_bytes(*args):
     return result
 
 
-def decode_int(string):
-    """
-    Decodes integer from byte string
-    """
-    result = 0
-    for n, c in enumerate(string):
-        if isinstance(c, str):
-            c = ord(c)
-        result |= c << (8 * n)
-    return result
+def decode_int(data):
+    """ Decodes integer from byte string """
+    assert isinstance(data, bytes)
+    return sum(c << (8 * n) for n, c in enumerate(data))
 
 
 def decode_string(string, len_pos, len_bytes=4):
