@@ -61,6 +61,7 @@ class MockSocket(object):
 
     def close(self):
         self.connected = False
+        self.request = False
 
     def sendto(self, data, *args, **kwargs):
         assert self.connected
@@ -78,5 +79,3 @@ class MockSocket(object):
             return response
         except KeyError:
             raise ConnectionError(10054, 'Connection error')
-        finally:
-            self.request = None
