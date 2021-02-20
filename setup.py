@@ -8,7 +8,7 @@ except:
 
 setup(
     name='samp-client',
-    version='3.0.0',
+    version='3.0.1',
     packages=['samp_client'],
     url='https://github.com/mick88/samp-client',
     license='MIT',
