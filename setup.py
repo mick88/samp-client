@@ -31,8 +31,6 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Topic :: Software Development :: Internationalization',
-        'Topic :: Utilities',
     ],
     project_urls={
         'Source': 'https://github.com/mick88/samp-client',
