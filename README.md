@@ -4,7 +4,7 @@
 
 A modern Python library for querying and managing SA-MP servers.
  
-Supported Python version 3.4 or newer. 
+Supported Python version 3.6 or newer. 
 If you require support for Python 2.7, install 2.1 version of the package.
 
 ### Installation
